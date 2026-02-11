@@ -6,7 +6,9 @@ import { SplitText } from "gsap/SplitText";
 gsap.registerPlugin(SplitText);
 const Hero = () => {
   useGSAP(() => {
-    let split = SplitText.create(".hero-title", { type: "chars," });
+    let titleSplit = SplitText.create(".hero-title", {
+      type: "chars",
+    });
 
     const tl = gsap.timeline({
       delay: 1,
@@ -17,15 +19,51 @@ const Hero = () => {
       y: 0,
       ease: "power1.inOut",
     });
-    tl.to(".hero-text-scroll", {
-      duration: 2,
-      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+
+    gsap.to(
+      ".hero-text-scroll",
+      {
+        duration: 1,
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+        ease: "circ.out",
+      },
+      "-=0.5",
+    );
+
+    gsap.from(
+      titleSplit.chars,
+      {
+        opacity: 0,
+        yPercent: 100,
+        stagger: 0.02,
+        ease: "power2.out",
+      },
+      "-=0.5",
+    );
+    const heroTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".hero-content",
+        start: "1% top",
+        end: "bottom top",
+        scrub: true,
+        // markers: true,
+      },
+    });
+    heroTl.to(".hero-container", {
+      rotate: 7,
+      scale: 0.9,
+      yPercent: 30,
+      ease: "power1.inOut",
     });
   });
   return (
-    <section className="w-full h-screen bg-main-bg ">
+    <section className="w-full h-screen bg-main-bg">
       <div className="hero-container ">
-        <img className="hero-img" src="/images/static-img.png" alt="" />
+        <img
+          className="hero-img abs-center"
+          src="/images/static-img.png"
+          alt=""
+        />
         <div
           className="
          hero-content opacity-0
@@ -42,7 +80,7 @@ const Hero = () => {
               <h1 className="">Protein + Cuffin</h1>
             </div>
           </div>
-          <h2 className="">
+          <h2 className="text-center">
             Live life to the Fullest with SPYLT: Shatter Boredom and Embrace
             your inner kid with every deliciously smooth chug
           </h2>
